@@ -10,7 +10,7 @@ Listen *:{{sslPort}}
   SSLCompression off
   SSLCertificateFile /etc/pki/tls/certs/{{sslHostname}}.cert
   SSLCertificateKeyFile /etc/pki/tls/private/{{sslHostname}}.key
-  SSLCertificateChainFile /etc/pki/tls/certs/{{sslHostname}}-ca.pem
+  SSLCACertificateFile /etc/pki/tls/certs/{{sslHostname}}-ca.pem
 
   <Directory "/home/{{user}}/public_html/public">
     AllowOverride All

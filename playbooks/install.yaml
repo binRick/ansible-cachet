@@ -4,8 +4,10 @@
   vars:
   tasks:
   - name: Installing required packages
-    with_items: [httpd,openssl,php,git,ansible,redis,mariadb,mariadb-server,mariadb-libs]
+    with_items: [httpd,openssl,git,ansible,redis,mariadb,mariadb-server,mariadb-libs,mod_ssl,MySQL-python,curl,tcpdump.memcached]
     yum: name={{item}} state=present
+  - name: Starting memcached Server
+    service: name=memcached state=started enabled=True
   - name: Starting/Enabling Redis Server
     service: name=redis enabled=True state=started
   - name: Starting/Enabling MySQL Server
@@ -50,8 +52,9 @@
   - name: Checking if APP_KEY is not set
     register: appKeyNotSet
     shell: "grep '^APP_KEY=$' /home/{{user}}/public_html/.env"
+    ignore_errors: True
   - name: Deploying cachet .env Template
-    when: appKeyNotSet.rc == 0
+    when: appKeyNotSet|failed or appKeyNotSet.rc == 0
     template: src=env.j2 dest=/home/{{user}}/public_html/.env
 #  - name: Running Composer Install
 #    become: yes
