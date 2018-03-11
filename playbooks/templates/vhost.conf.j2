@@ -1,0 +1,23 @@
+Listen *:{{sslPort}}
+<VirtualHost *:{{sslPort}}>
+  ServerName {{sslHostname}}
+  DocumentRoot "/home/{{user}}/public_html"
+
+  SSLEngine on
+  SSLCipherSuite AES256+EECDH:AES256+EDH
+  SSLProtocol All -SSLv2 -SSLv3
+  SSLHonorCipherOrder On
+  SSLCompression off
+  SSLCertificateFile /etc/pki/tls/certs/{{sslHostname}}.cert
+  SSLCertificateKeyFile /etc/pki/tls/private/{{sslHostname}}.key
+  SSLCertificateChainFile /etc/pki/tls/certs/{{sslHostname}}-ca.pem
+
+  <Directory "/home/{{user}}/public_html">
+    AllowOverride All
+    Options -Indexes +FollowSymLinks
+    Require all granted
+  </Directory>
+  RewriteCond %{HTTP_HOST} !^www\. [NC]
+  RewriteRule ^(.*)$ http://www.%{HTTP_HOST}%{REQUEST_URI} [R=301,L]
+
+</VirtualHost>

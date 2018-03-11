@@ -1,0 +1,10 @@
+[cachetServers]
+status ansible_ssh_host=localhost
+
+[cachetServers:vars]
+user=cachet
+sslHostname=status.vpntech.net 
+sslPort=444
+sslCertFile=../../ssl-certs/status.vpntech.net/certificate.txt
+sslKeyFile=../../ssl-certs/status.vpntech.net/certificate.key
+sslCAFile=../../ssl-certs/status.vpntech.net/lets-encrypt-x3-cross-signed.pem.txt

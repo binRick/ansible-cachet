@@ -1,0 +1,47 @@
+- name: Installing Cachet
+  hosts: cachetServers
+  roles: []
+  vars:
+  tasks:
+  - name: Installing required packages
+    with_items: [httpd,openssl,php,git,ansible]
+    yum: name={{item}} state=present
+  - name: Adding Cachet System User
+    user:
+        name: "{{user}}"
+        generate_ssh_key: yes
+        home: "/home/{{user}}"
+        createhome: yes
+  - name: Cloning Cachet Repo
+    git: 
+        repo: https://github.com/cachethq/Cachet.git
+        dest: "/home/{{user}}/public_html"
+        clone: yes
+  - name: Chowning Home Directory
+    file:
+        path: "/home/{{user}}"
+        owner: "{{user}}"
+        group: "{{user}}"
+        mode: 0711
+  - name: Chowning Docroot
+    file:
+        path: "/home/{{user}}/public_html"
+        owner: "{{user}}"
+        group: "{{user}}"
+        mode: 0755
+  - name: Copying SSL Key to Apache
+    copy: src={{sslKeyFile}} dest=/etc/pki/tls/private/{{sslHostname}}.key
+  - name: Copying SSL Cert to Apache
+    copy: src={{sslCertFile}} dest=/etc/pki/tls/certs/{{sslHostname}}.cert
+  - name: Copying CA Chain File to Apache
+    copy: src={{sslCAFile}} dest=/etc/pki/tls/certs/{{sslHostname}}-ca.pem
+  - name: Deploying Apache Virtual Host File
+    register: vH
+    template: 
+        src: vhost.conf.j2 
+        dest: "/etc/httpd/conf.d/{{sslHostname}}.conf"
+  - name: Restarting Apache
+    when: vH|changed
+    service: name=httpd state=restarted enabled=True
+
+
