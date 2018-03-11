@@ -2,9 +2,20 @@
 status ansible_ssh_host=localhost
 
 [cachetServers:vars]
+TimeZone=EST
 user=cachet
 sslHostname=status.vpntech.net 
 sslPort=444
 sslCertFile=../../ssl-certs/status.vpntech.net/certificate.txt
 sslKeyFile=../../ssl-certs/status.vpntech.net/certificate.key
 sslCAFile=../../ssl-certs/status.vpntech.net/lets-encrypt-x3-cross-signed.pem.txt
+dbHost=localhost
+dbPort=3306
+dbName=cachet
+dbUser=cachet
+dbPass=9asd9as7td8g232
+smtpHost=localhost
+smtpPort=25
+redisHost=localhost
+redisPort=6380
+redisDatabase=cachet

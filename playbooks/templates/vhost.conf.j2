@@ -1,7 +1,7 @@
 Listen *:{{sslPort}}
 <VirtualHost *:{{sslPort}}>
   ServerName {{sslHostname}}
-  DocumentRoot "/home/{{user}}/public_html"
+  DocumentRoot "/home/{{user}}/public_html/public"
 
   SSLEngine on
   SSLCipherSuite AES256+EECDH:AES256+EDH
@@ -12,10 +12,12 @@ Listen *:{{sslPort}}
   SSLCertificateKeyFile /etc/pki/tls/private/{{sslHostname}}.key
   SSLCertificateChainFile /etc/pki/tls/certs/{{sslHostname}}-ca.pem
 
-  <Directory "/home/{{user}}/public_html">
+  <Directory "/home/{{user}}/public_html/public">
     AllowOverride All
-    Options -Indexes +FollowSymLinks
     Require all granted
+    Options Indexes FollowSymLinks
+    Order allow,deny
+    Allow from all
   </Directory>
   RewriteCond %{HTTP_HOST} !^www\. [NC]
   RewriteRule ^(.*)$ http://www.%{HTTP_HOST}%{REQUEST_URI} [R=301,L]

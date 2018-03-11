@@ -1,2 +1,2 @@
 #!/bin/bash
-ansible-playbook -i Inventory.txt playbooks/install.yaml
+ansible-playbook -i Inventory.txt playbooks/install.yaml $1
